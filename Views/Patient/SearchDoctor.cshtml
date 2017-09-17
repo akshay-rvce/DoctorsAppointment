@@ -1,0 +1,258 @@
+﻿@{
+    Layout = null;
+    DoctorsAppointment.Models.DoctorEntities dd = new DoctorsAppointment.Models.DoctorEntities();
+    DoctorsAppointment.Models.Doctor d = new DoctorsAppointment.Models.Doctor();
+    DoctorsAppointment.Models.Schedule s = new DoctorsAppointment.Models.Schedule();
+
+    double distance = 0, mn = 0, k = 0;
+    int hr = 0;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>SearchDoctor</title>
+   
+    
+
+  
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  
+   
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1-ujT9YwKi_uOcf04-OmP3Fv-7SmbwKE">
+    </script>
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true&key=AIzaSyB1-ujT9YwKi_uOcf04-OmP3Fv-7SmbwKE"></script>
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&v=3&libraries=geometry&key=AIzaSyB1-ujT9YwKi_uOcf04-OmP3Fv-7SmbwKE"></script>
+  
+    <style>
+        .jumbotron {
+            background-color: 
+ 
+  #bb99ff ;
+            color: #ffffff;
+            padding: 20px 20px;
+        }
+    </style>
+</head>
+
+
+<body>
+
+
+    <div class="jumbotron">
+        <h3>Doctor appointments with article publishing</h3>
+        <p>A doctor is just a click away</p>
+    </div>
+
+
+
+    <div>
+        <span class="label label-primary">Specialisation:@Session["spdoctor"]</span>
+        <span class="label label-primary">Date of appointment:@Session["date"]</span>
+        
+         <br />
+        
+       
+
+        @{
+
+
+
+            string slat = Session["lat"].ToString();
+            string slng = Session["lng"].ToString();
+            //System.DateTime dt = (System.DateTime)Session["date"];
+            DateTime dt= Convert.ToDateTime(Session["date"]);
+            string sp = (String)Session["spdoctor"];
+            var query = from doctor in dd.Doctors where doctor.specialization==sp select doctor;
+
+            foreach (var result in query)
+            {
+
+               var schedulequery = from schedule in dd.Schedules where schedule.date == dt && schedule.regid == result.regid select schedule;
+
+
+
+
+                        <input type="hidden" name="distance" onload="hello();"/>
+
+
+                DirectionsProxy dp = new DirectionsProxy();
+                distance = dp.GetDrivingDistanceInMiles(slat, slng, result.latitude, result.longitude);
+
+
+                if (distance <= Convert.ToInt32(Session["distance"]) + 1)
+                {
+
+
+                    string imagedoctor = Convert.ToBase64String(result.image);
+                    string imageDoctorURL = string.Format("data:image/jpg;base64,{0}", imagedoctor);
+                    <div class="media" style="border-color:chartreuse;border-bottom:groove;border-bottom-color:burlywood">
+                        <div class="media-left">
+                            <table>
+                                <tr>
+                                    <td><img src="@imageDoctorURL" class="media-object" style="width:100px"></td>
+                                    <td>
+                                        <p style="font-size:large;" class="media-heading">Dr.@result.name</p>
+
+                                </tr>
+                            </table>
+                        </div>
+                        <br/>
+                        
+                        
+                        <div class="media-body">
+
+                            <form action="~/Patient/schedule" onload="GetAddress(@result.latitude,@result.longitude,@result.regid)">
+                                <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyB1-ujT9YwKi_uOcf04-OmP3Fv-7SmbwKE"></script>
+                                <script type="text/javascript">
+                                    GetAddress(@result.latitude,@result.longitude,"@result.regid")
+        function GetAddress(lat, lng,i) {
+
+
+            var lat = parseFloat(lat);
+
+            var lng = parseFloat(lng);
+
+            var latlng = new google.maps.LatLng(lat, lng);
+
+            var geocoder = new google.maps.Geocoder();
+
+            geocoder.geocode({ 'latLng': latlng }, function (results, status) {
+
+                if (status == google.maps.GeocoderStatus.OK) {
+
+                    if (results[1]) {
+                        //alert("in if");
+                        document.getElementById(i).innerHTML= "Location: " + results[1].formatted_address;
+
+                    }
+
+                }
+                else
+                {
+                    alert("cannot fetch address"+google.maps.GeocoderStatus);
+                }
+            });
+
+
+        }
+
+                                </script>
+                                <p id="@result.regid"></p>
+
+                                <h4><span class="label label-info">Available appointment timing</span></h4>
+                                @{
+                                                
+                                                Response.Write(schedulequery.Count());
+                                                if (schedulequery.Count() == 0)
+                                                {
+                                                    for (k = result.start_time; k < result.end_time; k += result.interval)
+                                                    {
+
+                                                        hr =(int) k / 60;
+                                                        mn = k % 60;
+                                                        int temp = 0;
+                                                        string tt = null;
+
+                                                        if (hr > 12)
+                                                        {
+                                                            temp = hr % 12;
+                                                            tt = "PM";
+
+                                                        }
+                                                        else
+                                                        {
+                                                            temp = hr;
+                                                            if (temp == 12)
+                                                            {
+                                                                tt = "PM";
+                                                            }
+                                                            else
+                                                            {
+                                                                tt = "AM";
+                                                            }
+                                                        }
+                                                    <input style="padding-left:5em;" type="radio" name="time" class="radio-inline" value="@k" /><label>@temp:@mn @tt</label>
+
+
+
+
+                                        }
+                                    }
+                                    else
+                                    {
+
+
+                                        for (k = result.start_time; k < result.end_time; k += result.interval)
+                                        {
+
+                                            schedulequery = from schedule in dd.Schedules where schedule.date == dt && schedule.time==k && schedule.regid==result.regid select schedule;
+
+                                           // foreach (var sc in schedulequery)
+                                            {
+                                                //Response.Write("<br/>Reg ID:"+sc.regid + "<br/>Time:" + sc.time + "<br/>Date" + sc.date);
+                                               
+                                               if (schedulequery.Count()==0)
+                                                {
+
+                                                    hr = (int)k / 60;
+                                                    int temp = 0;
+                                                    string tt = null;
+                                                    if (hr > 12)
+                                                    {
+                                                        temp = hr % 12;
+                                                        tt = "PM";
+
+                                                    }
+                                                    else
+                                                    {
+                                                        temp = hr;
+                                                        if (temp == 12)
+                                                        {
+                                                            tt = "PM";
+                                                        }
+                                                        else
+                                                        {
+                                                            tt = "AM";
+                                                        }
+                                                    }
+
+                                                    mn = k % 60;
+                                                        <input style="padding-left:5em;" class="radio-inline" type="radio" name="time" value="@k"/><label>@temp:@mn @tt</label>
+
+                                                        
+                                                    }
+
+                                                }
+
+
+                                            }
+                                        }
+                                    }
+                                <br />
+                                <span class="badge">Distance:@dp.dist</span>
+                                <input type="hidden" name="regid" value="@result.regid"/>
+                                <input type="hidden" name="date" value="@Session["date"]"/>
+                                <input type="hidden" name="email" value="@Session["email"]"/>
+                                <input type="submit" style="margin-left:80%;" class="btn btn-primary" name="book" value="book"/>
+
+                            </form>
+
+
+
+
+                        </div>
+                    </div>
+                    }
+
+
+                }
+            }
+    </div>
+
+    </body>
+</html>

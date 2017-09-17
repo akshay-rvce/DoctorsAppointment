@@ -1,0 +1,158 @@
+﻿
+@{
+    @inherits System.Web.Mvc.WebViewPage
+    Layout = null;
+
+    if (Session["email"] != null)
+    {
+        Response.Redirect("Patient/Index");
+    }
+
+}
+
+
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Doctor appointment system</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+            .jumbotron { 
+    background-color:
+  #bb99ff ;
+    color: #ffffff;
+    padding: 20px 20px;
+}
+
+    </style>
+</head>
+
+<body>
+
+
+    <div class="jumbotron">
+        <h3>Doctor appointments with article publishing</h3>
+        <p>A doctor is just a click away</p>
+        </div>
+        <div class="container">
+          
+            <div class="row">
+
+
+                <div class="col-sm-6">
+
+                    <p>A doctor is just a click away</p>
+                    <p>Health feeds</p>
+                    Are you a doctor? Then<a href="Doctor/Index" class="btn btn-info">click here</a>to serve patients
+                </div>
+                <div class="col-sm-6">
+                    <form class="form-inline" method="post" action="Default/PatientLogin">
+                        <div class="form-group">
+                            <label for="email">Email address<span style="color:red;font-style:oblique">*</span>:</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="pwd">Password<span style="color:red;font-style:oblique">*</span>:</label>
+                            <input type="password" class="form-control" id="pwd" name="password" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-default">Log-In</button>
+                    </form>
+                    <h3>Don't have an account then join us .....!</h3>
+                    <form method="post" enctype="multipart/form-data" action="Default/store">
+
+                        <label for="email">Email address<span style="color:red;font-style:oblique">*</span>:</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+
+
+
+                        <label for="name">Name<span style="color:red;font-style:oblique">*</span>:</label>
+                        <input type="text" class="form-control" id="name" name="name" onblur="allLetter(this)" required>
+                        <script language='javascript' type='text/javascript'>
+                        function allLetter(inputtxt)
+                        {
+                        var letters = /^[A-Za-z]+$/;
+                        if(inputtxt.value.match(letters))
+                        {
+                        return true;
+                        }
+                        else
+                        {
+                        alert("Not a valid input");
+                        return false;
+                        }
+                        }
+                            </script>
+
+
+
+                        <label for="pwd">Password<span style="color:red;font-style:oblique">*</span>:</label>
+                        <input type="password" class="form-control" id="pwd" name="password" required>
+
+
+
+                        <label for="pwd">Re-Enter Password<span style="color:red;font-style:oblique">*</span>:</label>
+                        <input type="password" class="form-control" id="pwd1" onblur="Validate()" required>
+                        <script language='javascript' type='text/javascript'>
+                            function Validate() {
+                                var password = document.getElementById("pwd1").value;
+                                var confirmPassword = document.getElementById("pwd").value;
+                                if (password != confirmPassword) {
+                                    alert("Passwords do not match.");
+                                    return false;
+                                }
+                                return true;
+                            }
+                        </script>
+                        
+
+
+                        <label for="city">City<span style="color:red;font-style:oblique">*</span>:</label>
+                        <input type="text" class="form-control" id="city" name="city" onblur="allLetter(this)" required>
+
+
+
+                        <label for="mobile">Mobile number<span style="color:red;font-style:oblique">*</span>:</label>
+                        <input type="number" class="form-control" id="mobile" name="mobile" onblur="phonenumber(this)" min="7000000000" required>
+                        <script language='javascript' type='text/javascript' >
+                        function phonenumber(inputtxt)
+                        {
+                            var phoneno = /^[7-9]\d{9}$/;
+                        if((inputtxt.value.match(phoneno)))
+                        return true;
+                        
+                        else
+                        {
+                        alert("not valid mobile number");
+                        return false;
+                        }
+                        }
+                            </script>
+
+                        <label for="image">Upload a profile picture</label>
+                        <input type="file" class="form-control" id="image" name="image">
+
+                        <br />
+                        <button type="submit" class="btn btn-default">Sign-Up</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+</body>
+</html>
+

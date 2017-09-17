@@ -1,0 +1,497 @@
+﻿
+@{
+    @inherits System.Web.Mvc.WebViewPage
+    Layout = null;
+    //DoctorsAppointment.Models.DoctorEntities = new DoctorsAppointment.Models.DoctorEntities();
+    DoctorsAppointment.Models.DoctorEntities dd = new DoctorsAppointment.Models.DoctorEntities();
+    DoctorsAppointment.Models.Doctor d = new DoctorsAppointment.Models.Doctor();
+    d = dd.Doctors.Find(Session["regid"]);
+    string imageBase64Data = Convert.ToBase64String(d.image);
+    string imageDataURL = string.Format("data:image/jpg;base64,{0}", imageBase64Data);
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Home</title>
+    <meta name="viewport" content="width=device-width" />
+    <title>Doctor appointment system</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+   
+    
+    
+
+
+
+
+
+
+
+    <style>
+        #map {
+            width: 100%;
+            height: 400px;
+        }
+
+        .jumbotron { 
+    background-color:
+  #bb99ff ;
+ 
+    color: #ffffff;
+    padding: 100px 25px;
+}
+
+        .bg-grey {
+    background-color: #f6f6f6;
+}
+
+        .container-fluid {
+    padding: 60px 50px;
+}
+
+        .logo {
+    font-size: 200px;
+}
+.media screen and (max-width: 768px) {
+    .col-sm-4 {
+        text-align: center;
+        margin: 25px 0;
+    }
+}
+
+
+        .navbar {
+    margin-bottom: 0;
+    background-color: #66b3ff;
+    z-index: 9999;
+    border: 0;
+    font-size: 12px !important;
+    line-height: 1.42857143 !important;
+    letter-spacing: 4px;
+    border-radius: 0;
+}
+
+.navbar li a, .navbar .navbar-brand {
+    color: #fff !important;
+}
+
+.navbar-nav li a:hover, .navbar-nav li.active a {
+    color: #f4511e !important;
+    background-color: #fff !important;
+}
+
+.navbar-default .navbar-toggle {
+    border-color: transparent;
+    color: #fff !important;
+}
+    </style>
+
+</head>
+<body>
+
+
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <img src="@imageDataURL" class="img-circle" alt="Cinque Terre" width="50" height="50" />Dr. @d.name
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#profile">PROFILE</a></li>
+                    <li><a href="#articles">ARTICLES</a></li>
+                    <li><a href="#schedules">SCHEDULES</a></li>
+                    <li><a href="#feed">HEALTH FEED</a></li>
+                    <li><a href="~/Doctor/LogOut">LOG OUT</a></li>
+                   
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+
+    <div class="jumbotron">
+        <h1>Doctor appointments with article publishing</h1>
+        <p>A doctor is just a click away</p>
+        <br/>
+        <br/>
+        <br/>
+
+        <h2>What our customers say</h2>
+        <div id="myCarousel" class="carousel slide text-center" data-ride="carousel">
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                <li data-target="#myCarousel" data-slide-to="1"></li>
+                <li data-target="#myCarousel" data-slide-to="2"></li>
+            </ol>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner" role="listbox">
+                <div class="item active">
+                    <h4>"This portal is the best. I am so happy with this platform!"<br><span style="font-style:normal;">Michael Roe</span></h4>
+                </div>
+                <div class="item">
+                    <h4>"One word... WOW!!"<br><span style="font-style:normal;">John Doe</span></h4>
+                </div>
+                <div class="item">
+                    <h4>"Could I... BE any more happy with this portal?"<br><span style="font-style:normal;">Chandler Bing</span></h4>
+                </div>
+            </div>
+
+            <br/>
+            <br/>
+            <br/>
+            <!-- Left and right controls -->
+            <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+
+
+
+
+
+    </div>
+
+
+
+    
+
+
+
+
+    <div class="container-fluid" id="profile">
+        <!--About-->
+        
+        <div class="thumbnail">
+            <img src="@imageDataURL" alt="Cinque Terre" width="350" height="350" />
+            </div>
+            <h1>Dr. @d.name</h1>
+            <h3><strong>Specialisation:</strong>@d.specialization</h3>
+
+
+
+
+
+
+
+
+        </div>
+
+
+    <div class="container-fluid bg-grey">
+        
+        </div>
+    
+
+
+    <div class="container-fluid text-center" id="articles">
+        <h2>Article share point</h2>
+        <form class="form-horizontal" method="post" action="~/Doctor/Publish" enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label class="control-label col-sm-2">Representation Picture:</label>
+                <div class="col-sm-10">
+                    <input type="file" name="image" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2">Title:</label>
+                <div class="col-sm-10">
+                    <input type="text" name="title" class="form-control">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-2">Genre:</label>
+                <div class="col-sm-10">
+                    <select id="Select1" name="genre" class="form-control">
+                        <option>Oral</option>
+                        <option>Gynochology</option>
+                        <option>Skin care</option>
+                        <option>Cardiology</option>
+                        <option>Gastroenerology</option>
+                        <option>Neurology</option>
+                        <option>Ear-Nose-Throat(ENT)</option>
+                        <option>Exercice</option>
+                        <option>Pediatric</option>
+                        <option>Urology</option>
+                        <option>Orthopedist</option>
+                        <option>Ophthalmology</option>
+                        <option>Diet</option>
+
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="control-label col-sm-2">Explaination:</label>
+                <div class="col-sm-10">
+                    <textarea name="context" placeholder="Please describe the context in few words"  class="form-control"></textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-2"></label>
+                <div class="col-sm-10">
+                    <input type="submit" value="publish" name="sbm"  />
+                </div>
+            </div>
+
+            <input type="hidden" value="@Session["regid"]" name="regid" />
+
+
+        </form>
+
+
+
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+    </div>
+
+
+    <div class="container-fluid text-center bg-grey" id="schedules">
+        <h3>your schedules</h3>
+
+
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Patient Name</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
+
+        @{
+
+            var sdls = from schedule in dd.Schedules where schedule.regid == d.regid orderby schedule.date descending select schedule;
+            foreach (var res in sdls)
+            {
+                int hr = @res.time / 60;
+                int mn = @res.time % 60;
+                int dummy = 0;
+                string tt = null;
+
+                DoctorsAppointment.Models.Patient pat = new DoctorsAppointment.Models.Patient();
+                pat = dd.Patients.Find(res.email);
+                <form action="~/Doctor/prescribe" method="post">
+                    <input type="hidden" name="sid" value="@res.sid" />
+                    <input type="hidden" name="pat" value="@pat.email" />
+                    <input type="hidden" name="doc" value="@d.name" />
+                    <table class="table" cellpadding="20">
+
+                        <tbody>
+
+                            <tr><td>@pat.name</td><td>@res.date.ToString().Substring(0, 10)</td><td>@hr:@mn</td><td><input type="submit" class="btn btn-success" value="prescribe"></td></tr>
+
+
+                        </tbody>
+                    </table>
+
+                </form>
+
+            }
+
+
+
+        }
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+    <div class="container-fluid" id="feed">
+        <div class="text-center">
+
+            <h3>Health Feeds</h3>
+            @{
+                //DoctorsAppointment.Models.article[] art=null;
+
+                var query = from article in dd.articles orderby article.id descending select article;
+                foreach (var result in query)
+                {
+                    string imagearticle = Convert.ToBase64String(result.picture);
+                    string imageArticleURL = string.Format("data:image/jpg;base64,{0}", imagearticle);
+                    DoctorsAppointment.Models.Doctor temp = new DoctorsAppointment.Models.Doctor();
+                    temp = dd.Doctors.Find(result.author);
+                    string imageuser = Convert.ToBase64String(temp.image);
+                    string imageuserURL = string.Format("data:image/jpg;base64,{0}", imageuser);
+
+                    <div class="media">
+                        <div class="media-left">
+                            <table>
+                                <tr>
+                                    <td><img src="@imageuserURL" class="media-object" style="width:100px"></td>
+                                    <td>
+                                        <p style="font-size:large;" class="media-heading">@result.title</p>
+                                        <h4 class="media-heading">Author:Dr.@temp.name</h4>
+                                        <h5 class="media-heading">Genre:@result.genre</h5>
+                                </tr>
+                            </table>
+                        </div>
+                        <br />
+                        <div class="media-body">
+
+                            <img src="@imageArticleURL" class="media-object" style="width:500px;image-rendering:optimizeQuality;align-content:center;">
+                            <br />
+
+
+                            <p style="font-family:'Berlin Sans FB';font-size:medium;text-align:left;">@result.context</p>
+
+                            <!--Comments code should be ther in this block-->
+                            
+
+                                @{
+
+
+                                    var cmtq = from comment in dd.comments where comment.aid == result.id orderby comment.cid ascending select comment;
+                                }
+
+                                @foreach (var cmts in cmtq)
+                                {
+
+
+                                    if (cmts.pid == null)
+                                    {
+                                        var user = from doctor in dd.Doctors where doctor.regid == cmts.regid select doctor;
+                                        string imagecomment = Convert.ToBase64String(user.First().image);
+                                        string imagecommentURL = string.Format("data:image/jpg;base64,{0}", imagecomment);
+
+
+                                        <table>
+
+                                            <tr>
+                                                <td><img src="@imagecommentURL" class="media-object" style="width:60px;"></td>
+
+
+
+
+
+                                                <td>Dr. @user.First().name</td>
+                                            </tr >
+                                        </table>
+
+                                         <table><tr><td><p>@cmts.message</p> </td></table>
+                                           
+                                                   
+                                                    <br />
+                                                    <br />
+                                    }
+                                    if (cmts.regid == null)
+                                    {
+                                        //memory error part
+                                        DoctorsAppointment.Models.Patient ppp = dd.Patients.Find(cmts.pid);
+                                        string imagecomment = Convert.ToBase64String(ppp.image);
+                                        string imagecommentURL = string.Format("data:image/jpg;base64,{0}", imagecomment);
+
+                                        <table>
+                                         <tr><td>   <img src="@imagecommentURL" class="media-object" style="width:60px;"></td>
+                                        
+
+                                                     <td>  @ppp.name</td>
+                                               </tr>       
+                                               </table>
+                                               <table>
+                                                        <tr><td><p>@cmts.message</p></td></tr>
+                                                   </table>
+
+                                                  
+                                                    <br />
+                                                    <br />
+
+                                    }
+
+
+                                }
+                               
+
+
+
+
+
+
+
+                                <br />
+                                <div class="media">
+                                    <div class="media-left">
+                                       <table>
+                                         <tr>
+                                                <td><img src="@imageDataURL" class="img-circle" alt="Cinque Terre" width="50" height="50"></td>
+                                                    <td>Dr.@d.name</td>
+                                           </tr>
+                                       </table>
+                                        <br/>
+                                    </div>
+                                    <div class="media-body">
+
+                                        <form action="~/Doctor/comment" method="post">
+                                            <input type="hidden" name="aid" value="@result.id" />
+                                            
+                                                    <table><tr><td><strong>Comment</strong></td></tr>
+                                         <tr><td colspan="4"> <input type="text" name="message" style="height:70px;width:600px" /></tr>
+                                               </table>
+                                                    <input type="submit" name="post" value="POST" style="height:25px;width:40px" class=" btn btn-success" onclick='alert("your response has been recorded and will be redirected to home page.")'>
+                                         
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--End of Comment code-->
+                            <br />
+                        </div>
+                  
+
+
+
+
+                                    }
+            }
+
+
+            </div>
+        </div>
+        
+
+
+
+           
+</body>
+</html>
+

@@ -1,0 +1,553 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="DoctorDataModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="articles">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="picture" Type="image" />
+          <Property Name="title" Type="varchar(max)" />
+          <Property Name="context" Type="ntext" />
+          <Property Name="author" Type="nchar" MaxLength="10" />
+          <Property Name="genre" Type="varchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="comments">
+          <Key>
+            <PropertyRef Name="cid" />
+          </Key>
+          <Property Name="cid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="aid" Type="int" />
+          <Property Name="pid" Type="nvarchar" MaxLength="50" />
+          <Property Name="regid" Type="nchar" MaxLength="10" />
+          <Property Name="message" Type="text" />
+        </EntityType>
+        <EntityType Name="Doctor">
+          <Key>
+            <PropertyRef Name="regid" />
+          </Key>
+          <Property Name="regid" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="specialization" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="city" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="image" Type="image" />
+          <Property Name="mobile" Type="int" Nullable="false" />
+          <Property Name="interval" Type="int" Nullable="false" />
+          <Property Name="start_time" Type="int" Nullable="false" />
+          <Property Name="end_time" Type="int" Nullable="false" />
+          <Property Name="latitude" Type="float" Nullable="false" />
+          <Property Name="longitude" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Patient">
+          <Key>
+            <PropertyRef Name="email" />
+          </Key>
+          <Property Name="email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="city" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="mobile" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="image" Type="image" />
+        </EntityType>
+        <EntityType Name="Prescription">
+          <Key>
+            <PropertyRef Name="pid" />
+          </Key>
+          <Property Name="sid" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="prescription_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="morning" Type="bit" Nullable="false" />
+          <Property Name="afternoon" Type="bit" Nullable="false" />
+          <Property Name="night" Type="bit" Nullable="false" />
+          <Property Name="random" Type="int" Nullable="false" />
+          <Property Name="quantity" Type="int" Nullable="false" />
+          <Property Name="pid" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Schedules">
+          <Key>
+            <PropertyRef Name="sid" />
+          </Key>
+          <Property Name="sid" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="regid" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="date" Type="date" Nullable="false" />
+          <Property Name="time" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <Association Name="FK_articles_Doctor">
+          <End Role="Doctor" Type="Self.Doctor" Multiplicity="0..1" />
+          <End Role="articles" Type="Self.articles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Doctor">
+              <PropertyRef Name="regid" />
+            </Principal>
+            <Dependent Role="articles">
+              <PropertyRef Name="author" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_comments_articles">
+          <End Role="articles" Type="Self.articles" Multiplicity="0..1" />
+          <End Role="comments" Type="Self.comments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="articles">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="comments">
+              <PropertyRef Name="aid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_comments_Doctor">
+          <End Role="Doctor" Type="Self.Doctor" Multiplicity="0..1" />
+          <End Role="comments" Type="Self.comments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Doctor">
+              <PropertyRef Name="regid" />
+            </Principal>
+            <Dependent Role="comments">
+              <PropertyRef Name="regid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_comments_Patient">
+          <End Role="Patient" Type="Self.Patient" Multiplicity="0..1" />
+          <End Role="comments" Type="Self.comments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patient">
+              <PropertyRef Name="email" />
+            </Principal>
+            <Dependent Role="comments">
+              <PropertyRef Name="pid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Patient_Schedules">
+          <End Role="Patient" Type="Self.Patient" Multiplicity="1" />
+          <End Role="Schedules" Type="Self.Schedules" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patient">
+              <PropertyRef Name="email" />
+            </Principal>
+            <Dependent Role="Schedules">
+              <PropertyRef Name="email" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Prescription_Schedules">
+          <End Role="Schedules" Type="Self.Schedules" Multiplicity="1" />
+          <End Role="Prescription" Type="Self.Prescription" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Schedules">
+              <PropertyRef Name="sid" />
+            </Principal>
+            <Dependent Role="Prescription">
+              <PropertyRef Name="sid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Schedules_Doctor">
+          <End Role="Doctor" Type="Self.Doctor" Multiplicity="1" />
+          <End Role="Schedules" Type="Self.Schedules" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Doctor">
+              <PropertyRef Name="regid" />
+            </Principal>
+            <Dependent Role="Schedules">
+              <PropertyRef Name="regid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DoctorDataModelStoreContainer">
+          <EntitySet Name="articles" EntityType="Self.articles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="comments" EntityType="Self.comments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Doctor" EntityType="Self.Doctor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Patient" EntityType="Self.Patient" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Prescription" EntityType="Self.Prescription" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Schedules" EntityType="Self.Schedules" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_articles_Doctor" Association="Self.FK_articles_Doctor">
+            <End Role="Doctor" EntitySet="Doctor" />
+            <End Role="articles" EntitySet="articles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_comments_articles" Association="Self.FK_comments_articles">
+            <End Role="articles" EntitySet="articles" />
+            <End Role="comments" EntitySet="comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_comments_Doctor" Association="Self.FK_comments_Doctor">
+            <End Role="Doctor" EntitySet="Doctor" />
+            <End Role="comments" EntitySet="comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_comments_Patient" Association="Self.FK_comments_Patient">
+            <End Role="Patient" EntitySet="Patient" />
+            <End Role="comments" EntitySet="comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Patient_Schedules" Association="Self.FK_Patient_Schedules">
+            <End Role="Patient" EntitySet="Patient" />
+            <End Role="Schedules" EntitySet="Schedules" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Prescription_Schedules" Association="Self.FK_Prescription_Schedules">
+            <End Role="Schedules" EntitySet="Schedules" />
+            <End Role="Prescription" EntitySet="Prescription" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Schedules_Doctor" Association="Self.FK_Schedules_Doctor">
+            <End Role="Doctor" EntitySet="Doctor" />
+            <End Role="Schedules" EntitySet="Schedules" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DoctorDataModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Doctor">
+          <Key>
+            <PropertyRef Name="regid" />
+          </Key>
+          <Property Name="regid" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="specialization" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="city" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="image" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="mobile" Type="Int32" Nullable="false" />
+          <Property Name="interval" Type="Int32" Nullable="false" />
+          <Property Name="start_time" Type="Int32" Nullable="false" />
+          <Property Name="end_time" Type="Int32" Nullable="false" />
+          <Property Name="latitude" Type="Double" Nullable="false" />
+          <Property Name="longitude" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Schedules" Relationship="Self.FK_Schedules_Doctor" FromRole="Doctor" ToRole="Schedules" />
+          <NavigationProperty Name="articles" Relationship="DoctorDataModel.FK_articles_Doctor" FromRole="Doctor" ToRole="article" />
+          <NavigationProperty Name="comments" Relationship="DoctorDataModel.FK_comments_Doctor" FromRole="Doctor" ToRole="comment" />
+        </EntityType>
+        <EntityType Name="Patient">
+          <Key>
+            <PropertyRef Name="email" />
+          </Key>
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="city" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="mobile" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="image" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="Schedules" Relationship="Self.FK_Patient_Schedules" FromRole="Patient" ToRole="Schedules" />
+          <NavigationProperty Name="comments" Relationship="DoctorDataModel.FK_comments_Patient" FromRole="Patient" ToRole="comment" />
+        </EntityType>
+        <EntityType Name="Schedule">
+          <Key>
+            <PropertyRef Name="sid" />
+          </Key>
+          <Property Name="sid" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="regid" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="time" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Doctor" Relationship="Self.FK_Schedules_Doctor" FromRole="Schedules" ToRole="Doctor" />
+          <NavigationProperty Name="Patient" Relationship="Self.FK_Patient_Schedules" FromRole="Schedules" ToRole="Patient" />
+          <NavigationProperty Name="Prescriptions" Relationship="DoctorDataModel.FK_Prescription_Schedules" FromRole="Schedule" ToRole="Prescription" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_Schedules_Doctor">
+          <End Role="Doctor" Type="Self.Doctor" Multiplicity="1" />
+          <End Role="Schedules" Type="Self.Schedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Doctor">
+              <PropertyRef Name="regid" />
+            </Principal>
+            <Dependent Role="Schedules">
+              <PropertyRef Name="regid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Patient_Schedules">
+          <End Role="Patient" Type="Self.Patient" Multiplicity="1" />
+          <End Role="Schedules" Type="Self.Schedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patient">
+              <PropertyRef Name="email" />
+            </Principal>
+            <Dependent Role="Schedules">
+              <PropertyRef Name="email" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DoctorEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Doctors" EntityType="Self.Doctor" />
+          <EntitySet Name="Patients" EntityType="Self.Patient" />
+          <EntitySet Name="Schedules" EntityType="Self.Schedule" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <AssociationSet Name="FK_Schedules_Doctor" Association="Self.FK_Schedules_Doctor">
+            <End Role="Doctor" EntitySet="Doctors" />
+            <End Role="Schedules" EntitySet="Schedules" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Patient_Schedules" Association="Self.FK_Patient_Schedules">
+            <End Role="Patient" EntitySet="Patients" />
+            <End Role="Schedules" EntitySet="Schedules" />
+          </AssociationSet>
+          <EntitySet Name="articles" EntityType="DoctorDataModel.article" />
+          <AssociationSet Name="FK_articles_Doctor" Association="DoctorDataModel.FK_articles_Doctor">
+            <End Role="Doctor" EntitySet="Doctors" />
+            <End Role="article" EntitySet="articles" />
+          </AssociationSet>
+          <EntitySet Name="Prescriptions" EntityType="DoctorDataModel.Prescription" />
+          <AssociationSet Name="FK_Prescription_Schedules" Association="DoctorDataModel.FK_Prescription_Schedules">
+            <End Role="Schedule" EntitySet="Schedules" />
+            <End Role="Prescription" EntitySet="Prescriptions" />
+          </AssociationSet>
+          <EntitySet Name="comments" EntityType="DoctorDataModel.comment" />
+          <AssociationSet Name="FK_comments_articles" Association="DoctorDataModel.FK_comments_articles">
+            <End Role="article" EntitySet="articles" />
+            <End Role="comment" EntitySet="comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_comments_Doctor" Association="DoctorDataModel.FK_comments_Doctor">
+            <End Role="Doctor" EntitySet="Doctors" />
+            <End Role="comment" EntitySet="comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_comments_Patient" Association="DoctorDataModel.FK_comments_Patient">
+            <End Role="Patient" EntitySet="Patients" />
+            <End Role="comment" EntitySet="comments" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="article">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="picture" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="title" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="context" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="author" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="genre" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Doctor" Relationship="DoctorDataModel.FK_articles_Doctor" FromRole="article" ToRole="Doctor" />
+          <NavigationProperty Name="comments" Relationship="DoctorDataModel.FK_comments_articles" FromRole="article" ToRole="comment" />
+        </EntityType>
+        <Association Name="FK_articles_Doctor">
+          <End Type="DoctorDataModel.Doctor" Role="Doctor" Multiplicity="0..1" />
+          <End Type="DoctorDataModel.article" Role="article" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Doctor">
+              <PropertyRef Name="regid" />
+            </Principal>
+            <Dependent Role="article">
+              <PropertyRef Name="author" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Prescription">
+          <Key>
+            <PropertyRef Name="pid" />
+          </Key>
+          <Property Name="sid" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="prescription_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="morning" Type="Boolean" Nullable="false" />
+          <Property Name="afternoon" Type="Boolean" Nullable="false" />
+          <Property Name="night" Type="Boolean" Nullable="false" />
+          <Property Name="random" Type="Int32" Nullable="false" />
+          <Property Name="quantity" Type="Int32" Nullable="false" />
+          <Property Name="pid" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Schedule" Relationship="DoctorDataModel.FK_Prescription_Schedules" FromRole="Prescription" ToRole="Schedule" />
+        </EntityType>
+        <Association Name="FK_Prescription_Schedules">
+          <End Type="DoctorDataModel.Schedule" Role="Schedule" Multiplicity="1" />
+          <End Type="DoctorDataModel.Prescription" Role="Prescription" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Schedule">
+              <PropertyRef Name="sid" />
+            </Principal>
+            <Dependent Role="Prescription">
+              <PropertyRef Name="sid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="comment">
+          <Key>
+            <PropertyRef Name="cid" />
+          </Key>
+          <Property Name="cid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="aid" Type="Int32" />
+          <Property Name="pid" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="regid" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="message" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="article" Relationship="DoctorDataModel.FK_comments_articles" FromRole="comment" ToRole="article" />
+          <NavigationProperty Name="Doctor" Relationship="DoctorDataModel.FK_comments_Doctor" FromRole="comment" ToRole="Doctor" />
+          <NavigationProperty Name="Patient" Relationship="DoctorDataModel.FK_comments_Patient" FromRole="comment" ToRole="Patient" />
+        </EntityType>
+        <Association Name="FK_comments_articles">
+          <End Type="DoctorDataModel.article" Role="article" Multiplicity="0..1" />
+          <End Type="DoctorDataModel.comment" Role="comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="article">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="comment">
+              <PropertyRef Name="aid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_comments_Doctor">
+          <End Type="DoctorDataModel.Doctor" Role="Doctor" Multiplicity="0..1" />
+          <End Type="DoctorDataModel.comment" Role="comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Doctor">
+              <PropertyRef Name="regid" />
+            </Principal>
+            <Dependent Role="comment">
+              <PropertyRef Name="regid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_comments_Patient">
+          <End Type="DoctorDataModel.Patient" Role="Patient" Multiplicity="0..1" />
+          <End Type="DoctorDataModel.comment" Role="comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patient">
+              <PropertyRef Name="email" />
+            </Principal>
+            <Dependent Role="comment">
+              <PropertyRef Name="pid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DoctorDataModelStoreContainer" CdmEntityContainer="DoctorEntities">
+          <EntitySetMapping Name="Doctors">
+            <EntityTypeMapping TypeName="DoctorDataModel.Doctor">
+              <MappingFragment StoreEntitySet="Doctor">
+                <ScalarProperty Name="regid" ColumnName="regid" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="specialization" ColumnName="specialization" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="image" ColumnName="image" />
+                <ScalarProperty Name="mobile" ColumnName="mobile" />
+                <ScalarProperty Name="interval" ColumnName="interval" />
+                <ScalarProperty Name="start_time" ColumnName="start_time" />
+                <ScalarProperty Name="end_time" ColumnName="end_time" />
+                <ScalarProperty Name="latitude" ColumnName="latitude" />
+                <ScalarProperty Name="longitude" ColumnName="longitude" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Patients">
+            <EntityTypeMapping TypeName="DoctorDataModel.Patient">
+              <MappingFragment StoreEntitySet="Patient">
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="mobile" ColumnName="mobile" />
+                <ScalarProperty Name="image" ColumnName="image" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Schedules">
+            <EntityTypeMapping TypeName="DoctorDataModel.Schedule">
+              <MappingFragment StoreEntitySet="Schedules">
+                <ScalarProperty Name="sid" ColumnName="sid" />
+                <ScalarProperty Name="regid" ColumnName="regid" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="time" ColumnName="time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="DoctorDataModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="articles">
+            <EntityTypeMapping TypeName="DoctorDataModel.article">
+              <MappingFragment StoreEntitySet="articles">
+                <ScalarProperty Name="genre" ColumnName="genre" />
+                <ScalarProperty Name="author" ColumnName="author" />
+                <ScalarProperty Name="context" ColumnName="context" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="picture" ColumnName="picture" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Prescriptions">
+            <EntityTypeMapping TypeName="DoctorDataModel.Prescription">
+              <MappingFragment StoreEntitySet="Prescription">
+                <ScalarProperty Name="pid" ColumnName="pid" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="random" ColumnName="random" />
+                <ScalarProperty Name="night" ColumnName="night" />
+                <ScalarProperty Name="afternoon" ColumnName="afternoon" />
+                <ScalarProperty Name="morning" ColumnName="morning" />
+                <ScalarProperty Name="prescription_name" ColumnName="prescription_name" />
+                <ScalarProperty Name="sid" ColumnName="sid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="comments">
+            <EntityTypeMapping TypeName="DoctorDataModel.comment">
+              <MappingFragment StoreEntitySet="comments">
+                <ScalarProperty Name="message" ColumnName="message" />
+                <ScalarProperty Name="regid" ColumnName="regid" />
+                <ScalarProperty Name="pid" ColumnName="pid" />
+                <ScalarProperty Name="aid" ColumnName="aid" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

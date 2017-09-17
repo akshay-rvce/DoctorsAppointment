@@ -1,0 +1,175 @@
+﻿
+@{
+    @inherits System.Web.Mvc.WebViewPage
+    Layout = null;
+    DoctorsAppointment.Models.DoctorEntities dd = new DoctorsAppointment.Models.DoctorEntities();
+    //DoctorsAppointment.Models.Doctor d = new DoctorsAppointment.Models.Doctor();
+    DoctorsAppointment.Models.Schedule s = new DoctorsAppointment.Models.Schedule();
+    DoctorsAppointment.Models.Prescription pr = new DoctorsAppointment.Models.Prescription();
+}
+
+<!DOCTYPE html>
+
+
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>SearchDoctor</title>
+
+
+
+
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+    <style>
+        .jumbotron {
+            background-color:
+  
+  #bb99ff ;
+            color: #ffffff;
+            padding: 20px 20px;
+        }
+    </style>
+    
+
+
+</head>
+
+
+<body >
+
+
+    <div class="jumbotron">
+        <h3>Doctor appointments with article publishing</h3>
+        <p>A doctor is just a click away</p>
+    </div>
+
+    <centre>
+                <h3>Schedule id:@Session["sid"]</h3>
+                <h3>Dr.@Session["doc"]</h3>
+    </centre>
+    <h4>Patient user id:@Session["pat"]</h4>
+
+
+
+    <table class="table">
+
+        <thead>
+            <tr>
+                <td>Prescription name</td>
+                <td>Timings</td>
+                <td>Quantity</td>
+                <td></td>
+            </tr>
+
+
+        </thead>
+        <tbody>
+            @{ 
+
+                string sid = Session["sid"].ToString();
+                var query = from prescription in dd.Prescriptions where prescription.sid == sid select prescription;
+
+                foreach (var result in query)
+                {
+
+                    <tr>
+                        <td>@result.prescription_name</td>
+                        <td>
+
+
+                            <span style="font-size:large">Morning:</span>@result.morning
+                            <span style="font-size:large">Afternoon:</span>@result.afternoon
+                            <span style="font-size:large">Night:</span>@result.night
+                            <span style="font-size:large">Random:</span>@result.random <span>/day</span>
+                           
+                                 </td>
+
+                        
+
+                        <td>
+                            @result.quantity
+                            </td>
+
+                        <td>
+
+                           
+                            <a href="delete?pid=@result.pid" class="btn btn-danger" onclick="confirm('are you sure you want to remove this prescription?')">Delete</a>
+                            </td>
+                        </tr>
+
+
+                    }
+
+                }
+
+            </tbody>
+
+
+
+        </table>
+
+
+
+    <!-- Trigger the modal with a button -->
+    <button type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#myModal">Prescribe</button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Prescription form</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Enter a prescription.</p>
+                    <form action="~/Doctor/medicate" method="post">
+
+                        <input type="hidden" name="sid" value="@Session["sid"]"/>
+                        <table>
+                        <tr><td>Prescription name</td><td><input type="text" name="medicine_name" required></td></tr>
+                        <tr><td><input type="checkbox" name="times" value="morning" />Morning</td>
+                        <td><input type="checkbox" name="times" value="afternoon" />Afternoon</td>
+                        <td><input type="checkbox" name="times" value="night" />Night</td></tr>
+                        <tr><td>Random</td><td><input type="number" name="random" value="0"/></td></tr>
+                        <tr><td>Quantity</td><td><input type="number" name="quantity"/></td></tr>
+                        <tr><td><input type="submit" value="Prescribe" onclick='confirm("Are you sure?")'></td></tr>
+                        </table>
+                    
+                    
+                    </form>
+
+
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+
+
+    
+    <a href="print?sid=@Session[sid]" class="btn btn-info" target="_blank" style="target-new: tab;">Print</a>
+    <a href="home" class="btn btn-info">End Prescription and return to home</a>
+
+    </body>
+</html>

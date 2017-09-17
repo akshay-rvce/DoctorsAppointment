@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="cfd4987120314d489d979defed702e86" Name="Diagram1">
+        <EntityTypeShape EntityType="DoctorDataModel.Doctor" Width="1.5" PointX="0.5" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoctorDataModel.Patient" Width="1.5" PointX="2.5" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoctorDataModel.Schedule" Width="1.5" PointX="5.875" PointY="0.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoctorDataModel.sysdiagram" Width="1.5" PointX="0.5" PointY="8.625" IsExpanded="true" />
+        <AssociationConnector Association="DoctorDataModel.FK_Schedules_Doctor" ManuallyRouted="false" />
+        <AssociationConnector Association="DoctorDataModel.FK_Patient_Schedules" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DoctorDataModel.article" Width="1.5" PointX="3.375" PointY="4" />
+        <AssociationConnector Association="DoctorDataModel.FK_articles_Doctor" />
+        <EntityTypeShape EntityType="DoctorDataModel.Prescription" Width="1.5" PointX="8" PointY="1.5" />
+        <AssociationConnector Association="DoctorDataModel.FK_Prescription_Schedules" />
+        <EntityTypeShape EntityType="DoctorDataModel.comment" Width="1.5" PointX="5.875" PointY="3.625" />
+        <AssociationConnector Association="DoctorDataModel.FK_comments_articles" />
+        <AssociationConnector Association="DoctorDataModel.FK_comments_Doctor" />
+        <AssociationConnector Association="DoctorDataModel.FK_comments_Patient" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

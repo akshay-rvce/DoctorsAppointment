@@ -1,0 +1,108 @@
+﻿
+@{
+    @inherits System.Web.Mvc.WebViewPage
+    Layout = null;
+    string sid = Session["sid"].ToString();
+    DoctorsAppointment.Models.DoctorEntities dd = new DoctorsAppointment.Models.DoctorEntities();
+    var query = from prescription in dd.Prescriptions where prescription.sid == sid select prescription;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>print</title>
+</head>
+<body>
+
+    <center><h1>Doctor appointment system</h1></center>
+
+    <div id="printarea">
+
+    <table class="table-bordered">
+        <thead>
+                        <tr>
+                            <td>Schedule Id</td>
+                            <td>Doctor name</td>
+                            <td>Patien userid</td>
+                            <td>Patient name</td>
+                            <td>Patient age</td>
+                            <td>Date</td>
+                            </tr>
+            </thead>
+
+
+        <tbody>
+            <tr>
+                <td>@Session["sid"]</td>
+                <td>@Session["doc"]</td>
+                <td>@Session["pat"]</td>
+                <td><input type="text" name="name" required></td>
+                <td><input type="number" name="name" required></td>
+               @{ 
+                   DoctorsAppointment.Models.Schedule s = dd.Schedules.Find(Session["sid"].ToString());
+               }
+                <td>@s.date</td>
+                </tr>
+
+
+            </tbody>
+
+        </table>
+    <br/>
+    <table class="table-bordered">
+
+        <thead>
+            <tr>
+                <td>Prescription name</td>
+                <td>Timings</td>
+                <td>Quantity</td>
+                <td></td>
+            </tr>
+
+
+        </thead>
+
+        <tbody>
+
+        @{
+
+            foreach (var result in query)
+            {
+
+                <tr>
+                    <td>@result.prescription_name</td>
+                    <td>
+
+
+                        <span style="font-size:large">Morning:</span>@result.morning
+                        <span style="font-size:large">Afternoon:</span>@result.afternoon
+                        <span style="font-size:large">Night:</span>@result.night
+                        <span style="font-size:large">Random:</span>@result.random <span>/day</span>
+
+                    </td>
+
+
+
+                    <td>
+                        @result.quantity
+                    </td>
+
+
+                    </tr>
+
+                    }
+                    }
+</tbody>
+        </table>
+
+
+        <br/>
+        <br/>
+        <br/>
+        <span style="margin-left:70%">Doctor's Signature</span>
+        </div>
+    <input type="button" onclick="window.print()" value="print!" />
+</body>
+</html>
