@@ -31,7 +31,7 @@ namespace DoctorsAppointment
             smtp.UseDefaultCredentials = false;
             smtp.Host = "smtp.gmail.com";
             smtp.Credentials = new System.Net.NetworkCredential
-                 ("askdoctor911@gmail.com", "1rv14mca06");
+                 ("askdoctor911@gmail.com", "");
 
             smtp.EnableSsl = true;
             smtp.Timeout = 30000;
