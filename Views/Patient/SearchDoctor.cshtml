@@ -107,7 +107,7 @@
                         <div class="media-body">
 
                             <form action="~/Patient/schedule" onload="GetAddress(@result.latitude,@result.longitude,@result.regid)">
-                                <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyB1-ujT9YwKi_uOcf04-OmP3Fv-7SmbwKE"></script>
+                                <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false&key=your_key"></script>
                                 <script type="text/javascript">
                                     GetAddress(@result.latitude,@result.longitude,"@result.regid")
         function GetAddress(lat, lng,i) {
